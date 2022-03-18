@@ -1,14 +1,12 @@
 <template>
-  <div class="add-blog">
+  <div id="add-blog">
     <h1>添加博客</h1>
     <form v-if="!submitted">
       <label>博客标题：</label>
       <input type="text" v-model="blog.title" required/>
-      <br/>
 
       <label>博客内容：</label>
       <textarea v-model="blog.content"></textarea>
-      <br/>
 
       <p>博客分类：</p>
       <div id="checkboxes">
@@ -26,17 +24,14 @@
       <select v-model="blog.author">
         <option v-for="author in authors" v-bind:key='author'>{{author}}</option>
       </select>
-      <br/>
 
-      <button @click.prevent="post">提交博客</button>
+      <button @click.prevent="post">添加博客</button>
 
     </form>
 
       <h3 v-if="submitted">您的博客发布成功</h3>
 
-    <hr/>
-
-    <div class="preview">
+    <div id="preview">
       <h2>博客总览</h2>
       <p>博客标题：{{blog.title}}</p>
       <p>博客内容：{{blog.content}}</p>
@@ -78,7 +73,7 @@ export default {
         // athor: this.blog.athor,
       })
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           this.submitted = true;
         })
     }
@@ -87,5 +82,49 @@ export default {
 </script>
 
 <style scoped>
+#add-blog *{
+  box-sizing: border-box;
+}
 
+#add-blog {
+  margin: 20px auto;
+  max-width: 600px;
+  padding: 20px;
+}
+
+textarea {
+  height: 200px;
+}
+
+p {
+  padding: 0;
+  margin: 20px 0 0;
+}
+
+input[type="text"],textarea,select{
+  display: block;
+  width:100%;
+  margin:0 0 8px;
+} 
+
+input[type="checkbox"]{
+  margin: 0 20px 0 0;
+}
+
+button {
+  display: block;
+  background: crimson;
+  color: #fff;
+  border: 0;
+  padding: 14px;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#preview{
+  padding:10px 20px;
+  border: 1px dotted #ccc;
+  margin:30px 0;
+}
 </style>
