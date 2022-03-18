@@ -69,11 +69,8 @@ export default {
       axios.post('https://jsonplaceholder.typicode.com', {
         title: this.blog.title,
         content: this.blog.content,
-        // categories: this.blog.categories,
-        // athor: this.blog.athor,
       })
         .then((data) => {
-          // console.log(data);
           this.submitted = true;
         })
     }
