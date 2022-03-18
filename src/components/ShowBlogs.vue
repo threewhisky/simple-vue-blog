@@ -2,13 +2,13 @@
   <div id="show-blogs" v-theme:column="'narrow'">
     <h1>博客总览</h1>
     <div class="search">
-      <input type="text">
+      <input type="text" placeholder="搜索" v-model="search">
     </div>
 
     <div class="bloglist">
-      <div class="single-blog" v-for="blog in blogs" v-bind:key="blog.id">
-        <h2 v-rainbow>{{blog.title}}</h2>
-        <article>{{blog.body}}</article>
+      <div class="single-blog" v-for="blog in searchBlogs" v-bind:key="blog.id">
+        <h2 v-rainbow>{{ toUpper(blog.title) }}</h2>
+        <article>{{ snippet(blog.body) }}</article>
 
       </div>
     </div>
@@ -24,13 +24,46 @@ export default {
   data () {
     return {
       blogs: [],
+      search: '',
     }
+  },
+
+  created () {
+    // 请求数据
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then((data) => {
+        this.blogs = data.data.slice(0,10);
+      });
+  },
+  computed: {
+    toUpper() {
+      // 把标题全部大写
+      return (title) => {
+        return title.toUpperCase();
+      }
+    },
+    snippet () {
+      // 给博客内容打点
+      return (body) => {
+        return body.slice(0,100) + '...';
+      }
+    },
+    searchBlogs() {
+      // 筛选搜索出的博客
+
+      return this.blogs.filter((blog) => {
+        return blog.title.match(this.search); // 这里只是返回true或者false
+      });
+    },
   },
   // 自定义指令注册和使用
   directives: {
-    rainbow: function (el, binding) {
-      // 随机彩虹色显示博客标题
-      el.style.color = '#' + Math.random().toString(16).slice(2,8);
+    // 想自定义指令只生效一次，就用bind来写
+    rainbow: {
+      bind(el) {
+        // 随机彩虹色显示博客标题
+        el.style.color = '#' + Math.random().toString(16).slice(2,8);
+      },
     },
     theme: function(el, binding) {
       //拿到自定义指令的值
@@ -45,13 +78,6 @@ export default {
         el.style.padding = '20px';
       }
     },
-  },
-  created () {
-    // 请求数据
-    axios.get('https://jsonplaceholder.typicode.com/posts')
-      .then((data) => {
-        this.blogs = data.data.slice(0,10);
-      });
   },
 
 }
