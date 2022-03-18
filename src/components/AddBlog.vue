@@ -1,7 +1,7 @@
 <template>
   <div class="add-blog">
     <h1>添加博客</h1>
-    <form>
+    <form v-if="!submitted">
       <label>博客标题：</label>
       <input type="text" v-model="blog.title" required/>
       <br/>
@@ -26,8 +26,13 @@
       <select v-model="blog.author">
         <option v-for="author in authors" v-bind:key='author'>{{author}}</option>
       </select>
+      <br/>
+
+      <button @click.prevent="post">提交博客</button>
 
     </form>
+
+      <h3 v-if="submitted">您的博客发布成功</h3>
 
     <hr/>
 
@@ -48,6 +53,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'add-blog',
   data () {
@@ -59,8 +65,24 @@ export default {
         author: '',
       },
       authors: ['Mark','Max','Bob'],
+      submitted: false,
     }
   },
+  methods: {
+    post: function() {
+      // https://jsonplaceholder.typicode.com/posts
+      axios.post('https://jsonplaceholder.typicode.com/posts', {
+        title: this.blog.title,
+        content: this.blog.content,
+        // categories: this.blog.categories,
+        // athor: this.blog.athor,
+      })
+        .then((data) => {
+          // console.log(data);
+          this.submitted = true;
+        })
+    }
+  }
 }
 </script>
 
