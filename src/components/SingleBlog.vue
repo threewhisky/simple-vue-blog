@@ -9,6 +9,8 @@
         {{category}}
       </li>
     </ul>
+    <button @click='deleteSingleBlog()'>删除</button>
+    <router-link :to="'/edit/' + id">编辑</router-link>
   </div>
 </template>
 
@@ -31,7 +33,16 @@ export default {
       .then((data) => {
         this.blog = data.data;
       })
-  }
+  },
+
+  methods: {
+    deleteSingleBlog(){
+      axios.delete('https://simple-vue-blog-434eb-default-rtdb.asia-southeast1.firebasedatabase.app/posts/' + this.id +'.json')
+        .then(()=>{
+          this.$router.push({path:'/'})
+        })
+    }
+  },
 }
 </script>
 
