@@ -1,16 +1,19 @@
 <template>
-  <div id="show-blogs" v-theme:column="'narrow'">
+  <div id="show-blogs" v-theme:column="'wide'">
     <h1>博客总览</h1>
     <div class="search">
       <input type="text" placeholder="搜索" v-model="search">
     </div>
 
     <div class="bloglist">
+      
       <div class="single-blog" v-for="blog in searchBlogs" v-bind:key="blog.id">
-        <h2 v-rainbow>{{ toUpper(blog.title) }}</h2>
-        <article>{{ snippet(blog.body) }}</article>
-
+        <router-link :to='"/blog/" + blog.id'>
+          <h2 v-rainbow>{{ toUpper(blog.title) }}</h2>
+          <article>{{ snippet(blog.body) }}</article>
+        </router-link>
       </div>
+      
     </div>
 
   </div>
@@ -83,7 +86,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+h1{
+  text-align: center;
+}
+input{
+  display: block;
+  width:80%;
+  margin: 0 auto;
+  padding: 8px;
+}
 #show-blogs {
   max-width: 600px;
   margin: 0 auto;
@@ -94,6 +106,14 @@ export default {
   margin: 20px 0;
   box-sizing: border-box;
   background-color: #eee;
+  border: 1px dotted #aaa;
 }
+
+#show-blogs a{
+  color: #444;
+  text-decoration: none;
+}
+
+
 
 </style>
