@@ -1,6 +1,6 @@
 <template>
-  <div id="add-blog">
-    <h1>添加博客</h1>
+  <div id="edit-blog">
+    <h1>编辑博客</h1>
     <form v-if="!submitted">
       <label>博客标题：</label>
       <input type="text" v-model="blog.title" required/>
@@ -25,7 +25,7 @@
         <option v-for="author in authors" v-bind:key='author'>{{author}}</option>
       </select>
 
-      <button @click.prevent="post">添加博客</button>
+      <button @click.prevent="post">编辑博客</button>
 
     </form>
 
@@ -50,9 +50,10 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'add-blog',
+  name: 'edit-blog',
   data () {
     return {
+      id: this.$route.params.id,
       blog: {
         title: '',
         content: '',
@@ -64,22 +65,31 @@ export default {
     }
   },
   methods: {
+    fetchData() {
+      axios.get('https://simple-vue-blog-434eb-default-rtdb.asia-southeast1.firebasedatabase.app/posts/' + this.id +'.json')
+        .then((data) => {
+          this.blog = data.data;
+        })
+    },
     post: function() {
-      axios.post('https://simple-vue-blog-434eb-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json', this.blog)
+      axios.put('https://simple-vue-blog-434eb-default-rtdb.asia-southeast1.firebasedatabase.app/posts/' + this.id +'.json', this.blog)
         .then((data) => {
           this.submitted = true;
         })
     }
-  }
+  },
+  created() {
+    this.fetchData();
+  },
 }
 </script>
 
 <style scoped>
-#add-blog *{
+#edit-blog *{
   box-sizing: border-box;
 }
 
-#add-blog {
+#edit-blog {
   margin: 20px auto;
   max-width: 600px;
   padding: 20px;
