@@ -66,11 +66,9 @@ export default {
   methods: {
     post: function() {
       // https://jsonplaceholder.typicode.com/posts
-      axios.post('https://jsonplaceholder.typicode.com', {
-        title: this.blog.title,
-        content: this.blog.content,
-      })
+      axios.post('https://simple-vue-blog-434eb-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json', this.blog)
         .then((data) => {
+          console.log(data);
           this.submitted = true;
         })
     }
