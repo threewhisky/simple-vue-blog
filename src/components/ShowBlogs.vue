@@ -10,7 +10,7 @@
       <div class="single-blog" v-for="blog in searchBlogs" v-bind:key="blog.id">
         <router-link :to='"/blog/" + blog.id'>
           <h2 v-rainbow>{{ toUpper(blog.title) }}</h2>
-          <article>{{ snippet(blog.body) }}</article>
+          <article>{{ snippet(blog.content) }}</article>
         </router-link>
       </div>
       
@@ -33,9 +33,12 @@ export default {
 
   created () {
     // 请求数据
-    axios.get('https://jsonplaceholder.typicode.com/posts')
+    axios.get('https://simple-vue-blog-434eb-default-rtdb.asia-southeast1.firebasedatabase.app/posts.json')
       .then((data) => {
-        this.blogs = data.data.slice(0,10);
+        for (let key in data.data) {
+          data.data[key].id = key;
+          this.blogs.push(data.data[key]);
+        }
       });
   },
   computed: {
@@ -47,8 +50,8 @@ export default {
     },
     snippet () {
       // 给博客内容打点
-      return (body) => {
-        return body.slice(0,100) + '...';
+      return (content) => {
+        return content.slice(0,100) + '...';
       }
     },
     searchBlogs() {

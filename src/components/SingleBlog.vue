@@ -1,7 +1,14 @@
 <template>
   <div id="single-blog">
     <h1>{{blog.title}}</h1>
-    <article>{{blog.body}}</article>
+    <article>{{blog.content}}</article>
+    <p>作者：{{blog.author}}</p>
+    <p>分类：</p>
+    <ul>
+      <li v-for="category in blog.categories" :key="category">
+        {{category}}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -20,7 +27,7 @@ export default {
   },
 
   created () {
-    axios.get('https://jsonplaceholder.typicode.com/posts/' + this.id)
+    axios.get('https://simple-vue-blog-434eb-default-rtdb.asia-southeast1.firebasedatabase.app/posts/' + this.id +'.json')
       .then((data) => {
         this.blog = data.data;
       })
